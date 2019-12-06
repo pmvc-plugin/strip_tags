@@ -12,7 +12,7 @@ class strip_tags extends PlugIn
     {
         if ($this['stripSpace']) {
             $this['strip'] = function($s) {
-                return $this->stripTags($this->stripSpace($s));
+                return $this->stripTagsAndSpace($s);
             };
         } else {
             $this['strip'] = function($s) {
@@ -23,16 +23,21 @@ class strip_tags extends PlugIn
 
     public function stripSpace($s)
     {
-        return mb_ereg_replace('[\s\s+]', ' ', $s); 
+        return \PMVC\plug('utf8')->eregReplace('[\s\s]+', ' ', $s);
     }
 
-    public function stripScriptStyle($s)
+    public function stripTagsAndSpace($s)
     {
-        return preg_replace('/<(script|style)[^>]*?>(.*?)<\/\\1>/si', '', $s);
+        return $this->stripSpace($this->stripTags($s));
     }
 
     public function stripTags($s)
     {
         return strip_tags($this->stripScriptStyle($s));
+    }
+
+    public function stripScriptStyle($s)
+    {
+        return preg_replace('/<(script|style)[^>]*?>(.*?)<\/\\1>/si', '', $s);
     }
 }

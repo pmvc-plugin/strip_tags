@@ -42,4 +42,12 @@ class Strip_tagsTest extends PHPUnit_Framework_TestCase
             ]
         ];
     }
+
+    public function testStripSpace() {
+        $p = \PMVC\plug($this->_plug);
+        $s = 'a b  c　d   ';
+        $actual = $p->stripSpace($s);
+        $expected = 'a b c d ';
+        $this->assertEquals($expected, $actual);
+    }
 }
